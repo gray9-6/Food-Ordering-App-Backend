@@ -1,8 +1,7 @@
-package com.ajay.filters;
+package com.ajay.config;
 
 
-import com.ajay.service.jwt.UserDetailsServiceImpl;
-import com.ajay.utils.JwtUtil;
+import com.ajay.service.CustomerUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,9 +38,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtTokenValidator1 extends OncePerRequestFilter {
 
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final CustomerUserDetailsService customerUserDetailsService;
     private final JwtUtil jwtUtil;
 
     /**
@@ -61,7 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("Inside doFilterInternal method");
 
         // Extract JWT token from Authorization header
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(JwtConstant.JWT_HEADER);
         String token = null;
         String username = null;
 
@@ -73,7 +72,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // If the username is extracted and user authentication is not already set up
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // Load UserDetails based on the extracted username
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
 
             // Validate the token against the loaded UserDetails
             if (jwtUtil.validateToken(token, userDetails)) {
@@ -91,45 +90,3 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 }
 
 
-
-//@Component
-//@RequiredArgsConstructor
-//@Slf4j
-//public class JwtRequestFilter extends OncePerRequestFilter {
-//
-//    private final UserDetailsServiceImpl userDetailsServiceImpl;
-//    private final JwtUtil jwtUtil;
-//
-//
-//
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//
-//        log.info("Inside doFilterInternal method");
-//
-//        String authHeader = request.getHeader("Authorization");
-//
-//        String token = null;
-//        String username = null;
-//
-//        if(authHeader!= null &&  authHeader.startsWith("Bearer ")){
-//            token = authHeader.substring(7);
-//            username = jwtUtil.extractUserName(token);
-//        }
-//
-//        if(username!= null && SecurityContextHolder.getContext().getAuthentication()==null){
-//            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-//
-//            if(jwtUtil.validateToken(token,userDetails)){
-//                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-//                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//
-//                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//
-//            }
-//        }
-//
-//        filterChain.doFilter(request,response);
-//
-//    }
-//}

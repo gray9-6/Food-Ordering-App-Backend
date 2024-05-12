@@ -1,4 +1,4 @@
-package com.ajay.utils;
+package com.ajay.config;//package com.ajay.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
