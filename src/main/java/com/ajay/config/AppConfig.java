@@ -3,6 +3,7 @@ package com.ajay.config;
 import com.ajay.service.CustomerUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,14 +23,15 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class AppConfig {
 
-//    private final JwtTokenValidator jwtTokenValidator;
-    private final JwtTokenValidator1 jwtTokenValidator;
+    private final JwtTokenValidator jwtTokenValidator;
     private final CustomerUserDetailsService customerUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.info("Inside AppConfig");
 
         http.sessionManagement(management ->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize

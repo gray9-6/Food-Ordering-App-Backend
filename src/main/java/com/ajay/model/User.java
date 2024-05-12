@@ -3,6 +3,7 @@ package com.ajay.model;
 import com.ajay.dtos.RestaurantDto;
 import com.ajay.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,6 +28,7 @@ public class User {
 
     String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
     UserRole role = UserRole.CUSTOMER;
