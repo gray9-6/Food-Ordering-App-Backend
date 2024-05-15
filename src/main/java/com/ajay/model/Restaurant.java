@@ -2,10 +2,7 @@ package com.ajay.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class Restaurant {
 
     @Id
@@ -46,6 +44,7 @@ public class Restaurant {
     @Column(length = 1000)
     @ElementCollection
     List<String> images;
+
 
     LocalDateTime registrationDate;  // its that date , when this restaurant owner register on our platform
 

@@ -97,6 +97,7 @@ public class AuthController {
         AuthResponse authResponse = AuthResponse.builder()
                 .jwt(jwt)
                 .message("Login Success")
+//                .role(UserRole.valueOf(role))
                 .role(UserRole.valueOf(role))
                 .build();
 

@@ -1,6 +1,7 @@
 package com.ajay.config;
 
 import com.ajay.service.CustomerUserDetailsService;
+import com.ajay.service.serviceImpl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +30,19 @@ public class AppConfig {
     private final JwtTokenValidator jwtTokenValidator;
     private final CustomerUserDetailsService customerUserDetailsService;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Inside AppConfig");
 
         http.sessionManagement(management ->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER","ADMIN")   // Role based Authentication, only the given role can access these apis
+//                        .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER","ADMIN")   // Role based Authentication, only the given role can access these apis
                         .requestMatchers("/api/**").authenticated()   // any user with token can access these apis, regardless or role.
                         .anyRequest().permitAll()  // other than the given above apis,any user can access apis , they don't need token
-                ).addFilterBefore(jwtTokenValidator, BasicAuthenticationFilter.class)   // checking if user have provided the token or not
+                )
                 .userDetailsService(customerUserDetailsService)
+                .addFilterBefore(jwtTokenValidator, UsernamePasswordAuthenticationFilter.class)   // checking if user have provided the token or not
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();

@@ -31,6 +31,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
+    @Enumerated(EnumType.STRING)
     UserRole role = UserRole.CUSTOMER;
 
     /* Preventing Jackson from serializing the 'orders' field to avoid potential
