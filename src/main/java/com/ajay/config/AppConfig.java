@@ -37,7 +37,7 @@ public class AppConfig {
 
         http.sessionManagement(management ->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-//                        .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER","ADMIN")   // Role based Authentication, only the given role can access these apis
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("RESTAURANT_OWNER","ADMIN")  // Role based Authentication, only the given role can access these apis
                         .requestMatchers("/api/**").authenticated()   // any user with token can access these apis, regardless or role.
                         .anyRequest().permitAll()  // other than the given above apis,any user can access apis , they don't need token
                 )

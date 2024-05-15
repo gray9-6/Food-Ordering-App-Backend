@@ -9,7 +9,6 @@ import com.ajay.repository.RestaurantRepository;
 import com.ajay.repository.UserRepository;
 import com.ajay.request.CreateRestaurantRequest;
 import com.ajay.service.RestaurantService;
-import com.ajay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +50,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .open(true)
                 .owner(user)
                 .build();
-        return restaurantRepository.save(restaurant);
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+        return savedRestaurant;
     }
 
     /**
