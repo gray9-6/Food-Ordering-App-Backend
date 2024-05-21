@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByJwtToken(String jwt) throws Exception {
         String email = jwtProvider.getEmailFromJwtToken(jwt);
-        User user = finduserByEmail(email);
+        User user = findUserByEmail(email);
         return user;
     }
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public User finduserByEmail(String email) throws Exception {
+    public User findUserByEmail(String email) throws Exception {
         User user = Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(()-> new Exception("User Not found"));
         return user;
     }

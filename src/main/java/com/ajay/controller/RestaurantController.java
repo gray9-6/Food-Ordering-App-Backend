@@ -4,7 +4,6 @@ import com.ajay.config.JwtConstant;
 import com.ajay.dtos.RestaurantDto;
 import com.ajay.model.Restaurant;
 import com.ajay.model.User;
-import com.ajay.request.CreateRestaurantRequest;
 import com.ajay.service.RestaurantService;
 import com.ajay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +24,15 @@ public class RestaurantController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Restaurant>> searchRestaurant(@RequestHeader(JwtConstant.JWT_HEADER) String jwt,
-                                                             @RequestParam String keyword) throws Exception {
+                                                             @RequestParam("keyword") String keyword) throws Exception {
 
         User user = userService.findUserByJwtToken(jwt);
         List<Restaurant> restaurantList = restaurantService.searchRestaurant(keyword);
         return new ResponseEntity<>(restaurantList, HttpStatus.OK);
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Restaurant>> searchRestaurant(@RequestHeader(JwtConstant.JWT_HEADER) String jwt) throws Exception {
+    @GetMapping
+    public ResponseEntity<List<Restaurant>> getAllRestaurant(@RequestHeader(JwtConstant.JWT_HEADER) String jwt) throws Exception {
 
         User user = userService.findUserByJwtToken(jwt);
         List<Restaurant> restaurantList = restaurantService.getAllRestaurant();
@@ -41,7 +40,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> searchRestaurant(@RequestHeader(JwtConstant.JWT_HEADER) String jwt,
+    public ResponseEntity<Restaurant> findRestaurantByID(@RequestHeader(JwtConstant.JWT_HEADER) String jwt,
                                                              @PathVariable("id") Long restaurantId) throws Exception {
 
         User user = userService.findUserByJwtToken(jwt);

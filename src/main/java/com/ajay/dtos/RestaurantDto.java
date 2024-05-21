@@ -2,17 +2,18 @@ package com.ajay.dtos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Data
 @Embeddable // jaha par maine iss class ko as a reference use kiya hai , waha par uss class ke  table mein , iss class ki fields table mein aa jaayegi
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class RestaurantDto {
 
     String title;

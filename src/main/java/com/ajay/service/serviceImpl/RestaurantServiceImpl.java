@@ -64,18 +64,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updatedRestaurant) throws Exception {
         Restaurant restaurant = findRestaurantById(restaurantId);
 
-        Restaurant updated =  restaurant.builder()
-                .address(updatedRestaurant.getAddress())
-                .id(updatedRestaurant.getId())
-                .openingHours(updatedRestaurant.getOpeningHours())
-                .images(updatedRestaurant.getImages())
-                .name(updatedRestaurant.getName())
-                .contactInformation(updatedRestaurant.getContactInformation())
-                .cuisineType(updatedRestaurant.getCuisineType())
-                .description(updatedRestaurant.getDescription())
-                .build();
+        // need to add check , that the given fields should not be null
+//        restaurant.setId(updatedRestaurant.getId());
+//        restaurant.setAddress(updatedRestaurant.getAddress());
+//        restaurant.setOpeningHours(updatedRestaurant.getOpeningHours());
+//        restaurant.setImages(updatedRestaurant.getImages());
+//        restaurant.setName(updatedRestaurant.getName());
+//        restaurant.setContactInformation(updatedRestaurant.getContactInformation());
+//        restaurant.setDescription(updatedRestaurant.getDescription());
+        restaurant.setCuisineType(updatedRestaurant.getCuisineType());
 
-        return restaurantRepository.save(updated);
+        return restaurantRepository.save(restaurant);
     }
 
     /**
@@ -136,18 +135,22 @@ public class RestaurantServiceImpl implements RestaurantService {
      */
     @Override
     public RestaurantDto addToFavorites(Long restaurantId, User user) throws Exception {
-        Restaurant restaurant = findRestaurantById(restaurantId);
+        Optional<RestaurantDto> optionalRestaurantDto = user.getFavorites().stream().filter(favorite-> favorite.getId().equals(restaurantId)).findFirst();
 
         // prepare the response
-        RestaurantDto restaurantDto = RestaurantDto.builder()
-                .images(restaurant.getImages())
-                .id(restaurant.getId())
-                .title(restaurant.getName())
-                .description(restaurant.getDescription())
-                .build();
+        RestaurantDto restaurantDto = null;
+        if(optionalRestaurantDto.isEmpty()){   // agar wo pehle se fav mein add nahi hai , tabhi add karnege
+            Restaurant restaurant = findRestaurantById(restaurantId);
 
-        if(!user.getFavorites().contains(restaurantDto)){
+            restaurantDto = new RestaurantDto();
+            restaurantDto.setDescription(restaurant.getDescription());
+            restaurantDto.setImages(restaurant.getImages());
+            restaurantDto.setTitle(restaurant.getName());
+            restaurantDto.setId(restaurant.getId());
+
             user.getFavorites().add(restaurantDto);
+        }else{
+            user.getFavorites().removeIf(restaurant -> restaurant.getId().equals(restaurantId));
         }
 
         // save the user
